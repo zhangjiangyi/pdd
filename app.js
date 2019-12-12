@@ -44,7 +44,7 @@ async function spider(token) {
 }
 
 function getToken() {
-	var token = db.prepare('select token from tokens where used = 1').get();
+	var token = db.prepare('select token from tokens where used = 0').get();
 	if (token) {
 		token = token.token;
 		db.prepare('update tokens set used = 1 where token = ?').run(token);
