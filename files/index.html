@@ -1,0 +1,247 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>后台管理系统</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-table.min.css">
+</head>
+
+<body style="background-color: lightslategrey; padding-top: 70px">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand" href="#">后台管理</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#modalSystem" data-toggle="modal">系统设置</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">任务列表</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown">
+                        资源管理
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#modalTokens" data-toggle="modal">Tokens</a>
+                        <a class="dropdown-item" href="#">支付宝</a>
+                        <a class="dropdown-item" href="#">银行卡</a>
+						<a class="dropdown-item" href="#">UA管理</a>
+						<a class="dropdown-item" href="#">VPN管理</a>
+                    </div>
+                </li>
+            </ul>
+            <!-- <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="暂时没用">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">搜索</button>
+            </form> -->
+        </div>
+    </nav>
+
+    <div class="modal fade" id="modalSystem" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">系统设置</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="linkPoolSize" class="form-label">同时运行的任务：</label>
+                            <input type="number" class="form-control" id="linkPoolSize">
+                        </div>
+                        <div class="checkbox">
+                            使用代理 <input type="checkbox">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">保存</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalTokens" tabindex="-1" role="dialog" style="overflow: auto">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Token管理</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <button type="button" class="btn btn-primary" href="#modalAddToken" data-toggle="modal">添加</button>
+					<button type="button" class="btn btn-primary" href="#tokenAera" >恢复</button>
+                    <button type="button" class="btn btn-danger" id="remove">删除</button>
+                    <table class="table table-striped" id="tokenTable">
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalAddToken" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">添加Token</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form role="form">
+                        <div class="form-group">
+                            <label for="name">输入Token：（一行一个）</label>
+                            <textarea class="form-control" rows="8" id="tokenAera"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="saveToken">保存</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row flex-xl-nowrap">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">Token信息</div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            Token剩余：
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 50%">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            UA剩余：
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 50%">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            ZFB剩余：
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 50%">
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">脚本信息</div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            Token剩余：
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 50%">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            UA剩余：
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 50%">
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            ZFB剩余：
+                            <div class="progress">
+                                <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 50%">
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-table.min.js"></script>
+    <script src="js/bootstrap-table-zh-CN.min.js"></script>
+    <script>
+        $("#tokenTable").bootstrapTable({
+            url: '/showToken',
+            locale: "zh-CN",
+            clickToSelect: true,
+            columns: [{
+                checkbox: true
+            }, {
+                field: 'token',
+                title: 'Token'
+            }, {
+                field: 'used',
+                title: '已使用'
+            }]
+        });
+        $("#remove").on("click", function () {
+            var rows = $("#tokenTable").bootstrapTable('getSelections');
+            if (rows.length) {
+                if (!confirm('确定删除？')) return;
+                var tokens = [];
+                $(rows).each(function () {
+                    tokens.push(this.token);
+                });
+                $.ajax({
+                    url: '/delToken',
+                    type: 'get',
+                    contentType: 'application/json;charset=utf-8',
+                    data: { tokens: JSON.stringify(tokens) },
+                    success: function () {
+                        $("#tokenTable").bootstrapTable('refresh');
+                    },
+                    error: function () {
+                        alert('数据删除失败!');
+                    }
+                });
+            } else alert("请先选择要删除的记录!");
+        });
+        $("#saveToken").on("click", function () {
+            var tokens = $("#tokenAera").val().split(/[(\r\n)\r\n]+/);
+            console.log(tokens);
+            $.ajax({
+                url: '/addToken',
+                type: 'get',
+                contentType: 'application/json;charset=utf-8',
+                data: { tokens: JSON.stringify(tokens) },
+                success: function () {
+                    $("#modalAddToken").modal('hide');
+                    $("#tokenAera").val('');
+                    $("#tokenTable").bootstrapTable('refresh');
+                },
+                error: function () {
+                    alert('Token添加失败!');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
