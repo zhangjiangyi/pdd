@@ -28,6 +28,9 @@ async function waitForClose(page) {
 
 async function spider(user) {
 	let ip = await controlIp(user);
+	if (!ip) {
+		return;
+	}
 	var args = [
 		'--no-sandbox'
 		, `--proxy-server=${ip}`		// 设置代理

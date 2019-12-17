@@ -11,6 +11,7 @@ function getProxyList() {
     let ts = 1;	        // 是否显示IP过期时间: 1显示 2不显示
     let mr = 1;	        // 去重选择（1:360天去重 2:单日去重 3:不去重）
     let apiURL = `http://http.tiqu.alicdns.com/getip3?num=${num}&type=${type}&yys=${yys}&port=${port}&pack=${pack}&ts=${ts}&mr=${mr}`;
+    console.log(apiURL);
 
     return new Promise((resolve, reject) => {
         var options = {
@@ -30,6 +31,9 @@ function getProxyList() {
             try {
                 if (error) throw error;
                 let bodyObj = JSON.parse(body);
+                if (bodyObj.code != 0) {
+                    console.error(bodyObj.msg);
+                }
                 let ips = bodyObj.data.map(data => data.ip + ':' + data.port);
                 resolve(ips);
             } catch (e) {
