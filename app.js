@@ -17,7 +17,7 @@ function rand(min, max) {
 	return Math.floor(Math.random() * (max - min)) + min;
 }
 
-userDB.prepare('create table if not exists tokens (token text unique, used numeric)').run();
+userDB.prepare('create table if not exists tokens (token text unique, ua text, used numeric)').run();
 uaDB.prepare('create table if not exists ua (ua text unique, times numeric)').run();
 
 async function waitForClose(page) {
@@ -28,7 +28,6 @@ async function waitForClose(page) {
 
 async function spider(user) {
 	let ip = await controlIp(user);
-	let ua = getUA();
 	var args = [
 		'--no-sandbox'
 		, `--proxy-server=${ip}`		// 设置代理
@@ -43,7 +42,7 @@ async function spider(user) {
 		const page = await browser.newPage();
 		addInterception(page, browser);
 		await page.emulate(devices['iPhone 7']);
-		await page.setUserAgent(ua); // UA填这里面
+		await page.setUserAgent(user.ua); // UA填这里面
 		await page.goto('https://mobile.yangkeduo.com/');
 		await page.setCookie({ name: 'PDDAccessToken', value: user.token });
 		await waitForClose(page);
@@ -110,10 +109,11 @@ app.use(async (ctx) => {
 			var tokens = ctx.query.tokens;
 			if (tokens) {
 				tokens = JSON.parse(tokens);
-				const stmti = userDB.prepare('insert or replace into tokens (token, used) values (?, 0)');
+				const stmti = userDB.prepare('insert or replace into tokens (token, ua, used) values (?, ?, 0)');
 				for (var i = 0; i < tokens.length; i++) {
 					if (tokens[i]) {
-						stmti.run(tokens[i]);
+						let ua = getUA();
+						stmti.run(tokens[i], ua.ua);
 					}
 				}
 				ctx.body = 'ok';
